@@ -11,27 +11,27 @@
   cursor: pointer;
 }
 
-.loginSwitchBtn{
+.loginSwitchBtn {
   font-weight: 500;
   color: rgb(102, 104, 106);
   transition: all 0.2s ease;
 }
 
-.loginSwitchBtn:hover{
-  color:white;
+.loginSwitchBtn:hover {
+  color: white;
   background-color: rgb(41, 74, 127);
 }
 
 .regBtn {
   font-weight: 500;
-  color:white;
+  color: white;
   background-color: rgb(41, 74, 127);
-  border:2px solid rgb(41, 74, 127);
+  border: 2px solid rgb(41, 74, 127);
   transition: all 0.2s ease;
 }
 
-.regBtn:hover{
-  border:2px solid rgb(84, 84, 84);
+.regBtn:hover {
+  border: 2px solid rgb(84, 84, 84);
   color: rgb(102, 104, 106);
   background-color: white;
 }

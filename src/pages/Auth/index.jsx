@@ -75,3 +75,6 @@ const Auth = () => {
 };
 
 export default Auth;
+
+
+// https://medium.com/@yogeshmulecraft/implementing-protected-routes-in-react-js-b39583be0740
