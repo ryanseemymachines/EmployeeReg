@@ -1,0 +1,491 @@
+swagger: "2.0"
+info:
+  version: "v1"
+  title: REST API for fresher Training
+  description: |
+    The is a demo Swagger Spec for the Employee management Project.
+host: localhost:8000
+basePath: /api
+paths:
+  /users/signup:
+    post:
+      tags:
+        - "User"
+      summary: "Create user"
+      description: "This can be used to register new user."
+      operationId: "createUser"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "email"
+          in: "body"
+          description: "email address of the user"
+          required: true
+          type: "string"
+          format: email
+        - name: "password"
+          in: "body"
+          description: "password of the user"
+          required: true
+          type: "string"
+          format: password
+        
+      responses:
+        200:
+          description: "returns jwt token if user account is successfully created"
+          schema:
+            $ref: "#/definitions/signup200Response"
+        422:
+          description: "Email address already exists"
+          schema:
+            $ref: "#/definitions/signup422Response"
+  /users/login:
+    post:
+      tags:
+        - "User"
+      summary: "Login user"
+      description: "This can be used to login user."
+      operationId: "loginUser"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "email"
+          in: "body"
+          description: "email address of the user"
+          required: true
+          type: "string"
+          format: email
+        - name: "password"
+          in: "body"
+          description: "password of the user"
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "returns jwt token if user account is valid"
+          schema:
+            $ref: "#/definitions/login200Response"
+        404:
+          description: "User not found"
+          schema:
+            $ref: "#/definitions/login404Response"
+        422:
+          description: "Incorrect Email/Password"
+          schema:
+            $ref: "#/definitions/login401Response"
+  /employee/register:
+    post:
+      tags:
+        - "Employee management"
+      summary: "Register new employee"
+      description: "This can be used to register new employee."
+      operationId: "registerCreditCard"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "fname"
+          in: "body"
+          description: "First Name"
+          required: true
+          type: "string"
+        - name: "lname"
+          in: "body"
+          description: "Last Name"
+          required: true
+          type: "string"
+        - name: "email"
+          in: "body"
+          description: "Email address"
+          required: true
+          type: "string"
+        - name: "dob"
+          in: "body"
+          description: "Date of birth"
+          required: true
+          type: "string"
+        - name: "doj"
+          in: "body"
+          description: "Date of join"
+          required: true
+          type: "string"
+        - name: "designation"
+          in: "body"
+          description: "Designation"
+          required: true
+          type: "string"
+        - name: "experience"
+          in: "body"
+          description: "Experience in years"
+          required: true
+          type: "string"
+        - name: "phoneNumber"
+          in: "body"
+          description: "Experience in years"
+          required: true
+          type: "string"
+        
+      security:
+        - Bearer: []
+      responses:
+        201:
+          description: "returns success message if employee is successfully added"
+          schema:
+            $ref: "#/definitions/ccRegister201Response"
+        422:
+          description: "Email already exists"
+          schema:
+            $ref: "#/definitions/ccRegister422Response"
+  /employee/list:
+    get:
+      tags:
+        - "Employee management"
+      summary: "get the list of employees"
+      description: "This can be used to get the list of employees."
+      operationId: "list"
+      produces:
+        - "application/json"
+      security:
+        - Bearer: []
+      responses:
+        200:
+          description: "returns list of employees"
+          schema:
+            $ref: "#/definitions/ccList200Response"
+        500:
+          description: "internal server error"
+          schema:
+            $ref: "#/definitions/internalServerError500Response"
+  /employee/getEmployeeById?employeeId={employeeId}:
+    get:
+      tags:
+        - "Employee management"
+      summary: "get the details of an employees"
+      description: "This can be used to get the details of an employees."
+      operationId: "getEmployeeById"
+      produces:
+        - "application/json"
+      security:
+        - Bearer: []
+      responses:
+        200:
+          description: "returns the details of an employees"
+          schema:
+            $ref: "#/definitions/ccDetails200Response"
+        404:
+          description: "returns error if employee details not found"
+          schema:
+            $ref: "#/definitions/ccDetails404Response"
+        500:
+          description: "internal server error"
+          schema:
+            $ref: "#/definitions/internalServerError500Response"
+  /employee/edit:
+    put:
+      tags:
+        - "Employee management"
+      summary: "Update an employee details"
+      description: "This can be used to update an employee details."
+      operationId: "updateEmployee"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "employeeId"
+          in: "body"
+          description: "id of the employee"
+          required: true
+          type: "string"
+        - name: "fname"
+          in: "body"
+          description: "First Name"
+          required: true
+          type: "string"
+        - name: "lname"
+          in: "body"
+          description: "Last Name"
+          required: true
+          type: "string"
+        - name: "email"
+          in: "body"
+          description: "Email address"
+          required: true
+          type: "string"
+        - name: "dob"
+          in: "body"
+          description: "Date of birth"
+          required: true
+          type: "string"
+        - name: "doj"
+          in: "body"
+          description: "Date of join"
+          required: true
+          type: "string"
+        - name: "designation"
+          in: "body"
+          description: "Designation"
+          required: true
+          type: "string"
+        - name: "experience"
+          in: "body"
+          description: "Experience in years"
+          required: true
+          type: "string"
+        - name: "phoneNumber"
+          in: "body"
+          description: "Experience in years"
+          required: true
+          type: "string"
+        
+      security:
+        - Bearer: []
+      responses:
+        201:
+          description: "returns success message if employee is successfully updated"
+          schema:
+            $ref: "#/definitions/ccUpdate201Response"
+        422:
+          description: "Email already exists"
+          schema:
+            $ref: "#/definitions/ccRegister422Response"
+        404:
+          description: "Employee Details not found"
+          schema:
+            $ref: "#/definitions/ccUpdate422Response"
+  /employee/delete:
+    delete:
+      tags:
+        - "Employee management"
+      summary: "to remove the details of an employees"
+      description: "This can be used to delete the details of an employees."
+      operationId: "getDelete"
+      parameters:
+        - name: "employeeId"
+          in: "body"
+          description: "id of the employee"
+          required: true
+          type: "string"
+      produces:
+        - "application/json"
+      security:
+        - Bearer: []
+      responses:
+        201:
+          description: "returns true if employee record is successfully deleted"
+          schema:
+            $ref: "#/definitions/ccDelete201Response"
+        404:
+          description: "returns error if employee details not found"
+          schema:
+            $ref: "#/definitions/ccDetails404Response"
+        500:
+          description: "internal server error"
+          schema:
+            $ref: "#/definitions/internalServerError500Response"
+securityDefinitions:
+  Bearer:
+    type: apiKey
+    name: Authorization
+    in: header
+definitions:
+  User:
+    type: "object"
+    properties:
+      userId:
+        type: "string"
+      isActive:
+        type: "boolean"
+        description: "true = active | fasle inactive"
+      createdBy:
+        type: "string"
+      createdAt:
+        type: "string"
+        format: date
+      updatedBy:
+        type: "string"
+      updatedAt:
+        type: "string"
+        format: date
+      email:
+        type: "string"
+        uniqueItems: true
+      password:
+        type: "string"
+      phoneNumber:
+        type: "string"
+  employee:
+    type: "object"
+    properties:
+      cardId:
+        type: "string"
+      isActive:
+        type: "boolean"
+        description: "true = active | fasle inactive"
+      createdBy:
+        type: "string"
+      createdAt:
+        type: "string"
+        format: date
+      updatedBy:
+        type: "string"
+      updatedAt:
+        type: "string"
+        format: date
+      cardNumber:
+        type: "integer"
+        uniqueItems: true
+      expiryDate:
+        type: "string"
+        format: date
+      cvv:
+        type: "integer"
+  signup200Response:
+    type: "object"
+    properties:
+      success:
+        type: "boolean"
+      message:
+        type: "string"
+        example: "User successfully registered"
+      token:
+        type: "string"
+        example: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlNzhhZDM3OThkMDAwMzIzYzYzYzQ0YiIsImVtYWlsIjoicHJhdmVlbi5rQHFidXJzdC5jb20iLCJmaXJzdE5hbWUiOiJQcmF2ZWVuIiwibGFzdE5hbWUiOiJLcmlzaG5hbiIsImlhdCI6MTU4NTE1MTY4MSwiZXhwIjoxNTg1MTU1MjgxfQ.NowC5ge5--2S7vD2Koc5FRdcWMEPqZMqrhLO6hCWJKA"
+  signup400Response:
+    type: "object"
+    properties:
+      success:
+        type: "boolean"
+        example: false
+      message:
+        type: "string"
+        example: "Invalid email address"
+  signup422Response:
+    type: "object"
+    properties:
+      success:
+        type: "boolean"
+        default: false
+      message:
+        type: "string"
+        example: "Email address already exists"
+  login200Response:
+    type: "object"
+    properties:
+      success:
+        type: "boolean"
+      message:
+        type: "string"
+        example: "User Login Success"
+      token:
+        type: "string"
+        example: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlNzhhZDM3OThkMDAwMzIzYzYzYzQ0YiIsImVtYWlsIjoicHJhdmVlbi5rQHFidXJzdC5jb20iLCJmaXJzdE5hbWUiOiJQcmF2ZWVuIiwibGFzdE5hbWUiOiJLcmlzaG5hbiIsImlhdCI6MTU4NTE1MTY4MSwiZXhwIjoxNTg1MTU1MjgxfQ.NowC5ge5--2S7vD2Koc5FRdcWMEPqZMqrhLO6hCWJKA"
+  login404Response:
+    type: "object"
+    properties:
+      success:
+        type: "boolean"
+        example: false
+      message:
+        type: "string"
+        example: "User not found"
+  login401Response:
+    type: "object"
+    properties:
+      success:
+        type: "boolean"
+        example: false
+      message:
+        type: "string"
+        example: "Email/Password is incorrect"
+  ccRegister201Response:
+    type: "object"
+    properties:
+      success:
+        type: "boolean"
+        example: true
+      message:
+        type: "string"
+        example: "Employee Successfully added"
+  ccUpdate201Response:
+    type: "object"
+    properties:
+      success:
+        type: "boolean"
+        example: true
+      message:
+        type: "string"
+        example: "Employee Successfully updated"
+  ccDelete201Response:
+    type: "object"
+    properties:
+      success:
+        type: "boolean"
+        example: true
+      message:
+        type: "string"
+        example: "Employee Successfully deleted"
+  ccRegister400Response:
+    type: "object"
+    properties:
+      success:
+        type: "boolean"
+        example: false
+      message:
+        type: "string"
+        example: "Invalid cvv"
+  ccRegister422Response:
+    type: "object"
+    properties:
+      success:
+        type: "boolean"
+        default: false
+      message:
+        type: "string"
+        example: "Email already exists"
+  internalServerError500Response:
+    type: "object"
+    properties:
+      success:
+        type: "boolean"
+        default: false
+      message:
+        type: "string"
+        example: "Internal Server Error"
+  ccList200Response:
+    type: "object"
+    properties:
+      success:
+        type: "boolean"
+        default: true
+      data:
+        type: "object"
+        properties:
+          list:
+            type: "[]"
+  ccDetails200Response:
+    type: "object"
+    properties:
+      success:
+        type: "boolean"
+        default: true
+      data:
+        type: "object"
+        properties:
+          employee:
+            type: "object"
+  ccDetails404Response:
+    type: "object"
+    properties:
+      success:
+        type: "boolean"
+        example: false
+      message:
+        type: "string"
+        example: "Employee not found"
+  ccUpdate422Response:
+    type: "object"
+    properties:
+      success:
+        type: "boolean"
+        example: false
+      message:
+        type: "string"
+        example: "Employee not found"

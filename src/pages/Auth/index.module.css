@@ -1,0 +1,72 @@
+.authContainer {
+  height: 100vh;
+  background-color: rgb(26, 59, 101);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.authContent {
+  height: 60vh;
+  width: 70vw;
+  background-color: white;
+  border-radius: 8px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.authContent h2 {
+  font-size: 2em;
+}
+
+.authContent p {
+  font-size: 1.2em;
+}
+
+.authContentLeft {
+  color: white;
+  padding: 30px;
+  background-color: rgb(63, 100, 130);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  gap: 25px;
+}
+
+.authContentRight {
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+}
+
+.authContentRight h2 {
+  color: rgb(41, 74, 127);
+}
+
+.authContentRight label{
+    font-size: 1.2em;
+    font-weight: 500;
+    color:rgb(98, 99, 102);
+}
+
+.authContentRight .fieldGroup {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 15px;
+}
+
+.passwordRow {
+  display: flex;
+  gap: 20px;
+}
+
+.passwordRow .fieldGroup {
+  flex: 1;
+}
+
+.errorMsg {
+  color: red;
+  font-size: 0.875rem;
+  margin-top: 4px;
+}
