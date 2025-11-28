@@ -43,30 +43,3 @@
 .authContentRight h2 {
   color: rgb(41, 74, 127);
 }
-
-.authContentRight label{
-    font-size: 1.2em;
-    font-weight: 500;
-    color:rgb(98, 99, 102);
-}
-
-.authContentRight .fieldGroup {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 15px;
-}
-
-.passwordRow {
-  display: flex;
-  gap: 20px;
-}
-
-.passwordRow .fieldGroup {
-  flex: 1;
-}
-
-.errorMsg {
-  color: red;
-  font-size: 0.875rem;
-  margin-top: 4px;
-}

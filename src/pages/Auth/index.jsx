@@ -1,12 +1,10 @@
-import { useState } from "react";
+import { Outlet, useNavigate } from "react-router-dom";
 import Button from "../../components/Button";
-import Input from "../../components/Input";
 import styles from "./index.module.css";
+import { useState } from "react";
 
 const Auth = () => {
-  const [emailError, setEmailError] = useState("");
-  const [passwordError, setPasswordError] = useState("");
-  const [confirmPasswordError, setConfirmPasswordError] = useState("");
+  const navigate = useNavigate();
 
   const [isLogin, setIsLogin] = useState(false);
 
@@ -16,58 +14,30 @@ const Auth = () => {
         <div className={styles.authContentLeft}>
           <h2>INFORMATION</h2>
           <p>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nisi ullam
-            nemo obcaecati, iste veniam voluptates vel dolores adipisci! Quia
-            tempora itaque quam ex, id suscipit esse consectetur necessitatibus
-            neque delectus!
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Obcaecati
+            corporis fuga aspernatur qui, fugiat quam sunt totam in cupiditate
+            corrupti assumenda nisi, dolorum eius laudantium veritatis.
+            Provident enim odio deleniti!
           </p>
           <p>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nisi ullam
-            nemo obcaecati, iste veniam voluptates vel dolores adipisci!
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Veritatis
+            nisi corporis consequatur cumque ad tempora eaque.
           </p>
 
           <Button
             btnStyle="loginSwitchBtn"
             type="button"
             label={isLogin ? "New Here? Register Now!" : "Have an account?"}
-            onClick={() => setIsLogin(!isLogin)}
+            onClick={() => {
+              const nextState = !isLogin;
+              setIsLogin(nextState);
+              navigate(nextState ? "/users/login" : "/users/signup", { replace: true });
+            }}
           />
         </div>
 
         <div className={styles.authContentRight}>
-          <h2>{isLogin ? "LOGIN" : "REGISTER"}</h2>
-
-          <div className={styles.fieldGroup}>
-            <label>Your email</label>
-            <Input type="text" placeholder="Enter email" />
-            {emailError && <p className={styles.errorMsg}>{emailError}</p>}
-          </div>
-
-          <div className={styles.passwordRow}>
-            <div className={styles.fieldGroup}>
-              <label>Password</label>
-              <Input type="password" placeholder="Password" />
-              {passwordError && (
-                <p className={styles.errorMsg}>{passwordError}</p>
-              )}
-            </div>
-
-            {!isLogin && (
-              <div className={styles.fieldGroup}>
-                <label>Confirm password</label>
-                <Input type="password" placeholder="Confirm password" />
-                {confirmPasswordError && (
-                  <p className={styles.errorMsg}>{confirmPasswordError}</p>
-                )}
-              </div>
-            )}
-          </div>
-
-          <Button
-            btnStyle="regBtn"
-            type="button"
-            label={isLogin ? "Login" : "Register"}
-          />
+          <Outlet />
         </div>
       </div>
     </div>
@@ -75,6 +45,3 @@ const Auth = () => {
 };
 
 export default Auth;
-
-
-// https://medium.com/@yogeshmulecraft/implementing-protected-routes-in-react-js-b39583be0740
