@@ -4,6 +4,7 @@ import Auth from "./pages/Auth";
 import Login from "./pages/Auth/Login";
 import Register from "./pages/Auth/Register";
 import Home from "./pages/Home";
+import EmployeeAddEdit from "./pages/EmployeeAddEdit"; 
 import store from "./redux/store";
 import "./App.css";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -21,6 +22,16 @@ function App() {
               </ProtectedRoute>
             }
           />
+
+          <Route 
+            path="/employee/signup" 
+            element={
+              <ProtectedRoute>
+                <EmployeeAddEdit />
+              </ProtectedRoute>
+            } 
+          />
+
           <Route path="/users" element={<Auth />}>
             <Route path="login" element={<Login />} />
             <Route path="signup" element={<Register />} />

@@ -1,0 +1,6 @@
+.actionBtns{
+    list-style-type: none;
+    display: flex;
+    gap:15px;
+    cursor: pointer;
+}

@@ -1,12 +1,12 @@
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useNavigate, useLocation } from "react-router-dom";
 import Button from "../../components/Button";
 import styles from "./index.module.css";
-import { useState } from "react";
 
 const Auth = () => {
   const navigate = useNavigate();
+  const location = useLocation();
 
-  const [isLogin, setIsLogin] = useState(false);
+  const isLogin = location.pathname.includes("login");
 
   return (
     <div className={styles.authContainer}>
@@ -29,9 +29,7 @@ const Auth = () => {
             type="button"
             label={isLogin ? "New Here? Register Now!" : "Have an account?"}
             onClick={() => {
-              const nextState = !isLogin;
-              setIsLogin(nextState);
-              navigate(nextState ? "/users/login" : "/users/signup", { replace: true });
+              navigate(isLogin ? "/users/signup" : "/users/login", { replace: true });
             }}
           />
         </div>

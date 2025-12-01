@@ -2,9 +2,8 @@ import { useState } from "react";
 import Input from "../../../components/Input";
 import Button from "../../../components/Button";
 import { useDispatch, useSelector } from "react-redux";
-import { registerUser } from "../../../redux/userSlice";
-import { useNavigate, Navigate } from "react-router-dom";
-import { isLoggedIn } from "../../../auth";
+import { registerUser, clearError } from "../../../redux/userSlice";
+import { useNavigate } from "react-router-dom";
 import styles from "./index.module.css";
 
 const Register = () => {
@@ -14,9 +13,7 @@ const Register = () => {
     confirmPassword: "",
   });
 
-  const [emailError, setEmailError] = useState("");
-  const [passwordError, setPasswordError] = useState("");
-  const [confirmPasswordError, setConfirmPasswordError] = useState("");
+  const [errors, setErrors] = useState({});
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -27,39 +24,39 @@ const Register = () => {
 
     setFormData((prev) => ({ ...prev, [name]: value }));
 
-    if (name === "email") setEmailError("");
-    if (name === "password") setPasswordError("");
-    if (name === "confirmPassword") setConfirmPasswordError("");
+    setErrors((prev) => ({ ...prev, [name]: "" }));
+
+    if (error) dispatch(clearError());
   };
 
   const validate = () => {
-    let valid = true;
+    let newErrors = {};
 
     if (!formData.email.trim()) {
-      setEmailError("Email is required");
-      valid = false;
+      newErrors.email = "Email is required";
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      setEmailError("Enter a valid email");
-      valid = false;
+      newErrors.email = "Enter a valid email";
     }
 
     if (!formData.password.trim()) {
-      setPasswordError("Password is required");
-      valid = false;
+      newErrors.password = "Password is required";
     } else if (formData.password.length < 6) {
-      setPasswordError("Password must be at least 6 characters");
-      valid = false;
+      newErrors.password = "Password must be at least 6 characters";
     }
 
     if (!formData.confirmPassword.trim()) {
-      setConfirmPasswordError("Please confirm your password");
-      valid = false;
+      newErrors.confirmPassword = "Please confirm your password";
     } else if (formData.password !== formData.confirmPassword) {
-      setConfirmPasswordError("Passwords do not match");
-      valid = false;
+      newErrors.confirmPassword = "Passwords do not match";
     }
 
-    return valid;
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0; 
+  };
+
+  const handleClearField = (fieldName) => {
+    setFormData((prev) => ({ ...prev, [fieldName]: "" }));
+    setErrors((prev) => ({ ...prev, [fieldName]: "" }));
   };
 
   const handleSubmit = async () => {
@@ -72,9 +69,6 @@ const Register = () => {
     }
   };
 
-  if (isLoggedIn()) {
-    return <Navigate to="/" replace />;
-  }
   return (
     <>
       <h2>REGISTER</h2>
@@ -85,10 +79,11 @@ const Register = () => {
           type="email"
           name="email"
           value={formData.email}
-          placeholder="Email"
           onChange={handleChange}
+          placeholder="Enter email"
+          onClear={() => handleClearField("email")}
         />
-        {emailError && <p className={styles.errorMsg}>{emailError}</p>}
+        {errors.email && <p className={styles.errorMsg}>{errors.email}</p>}
       </div>
 
       <div className={styles.passwordRow}>
@@ -98,10 +93,13 @@ const Register = () => {
             name="password"
             type="password"
             value={formData.password}
-            placeholder="Password"
             onChange={handleChange}
+            placeholder="Password"
+            onClear={() => handleClearField("password")}
           />
-          {passwordError && <p className={styles.errorMsg}>{passwordError}</p>}
+          {errors.password && (
+            <p className={styles.errorMsg}>{errors.password}</p>
+          )}
         </div>
 
         <div className={styles.fieldGroup}>
@@ -109,11 +107,13 @@ const Register = () => {
           <Input
             name="confirmPassword"
             type="password"
-            placeholder="Confirm Password"
+            value={formData.confirmPassword}
             onChange={handleChange}
+            placeholder="Confirm Password"
+            onClear={() => handleClearField("confirmPassword")}
           />
-          {confirmPasswordError && (
-            <p className={styles.errorMsg}>{confirmPasswordError}</p>
+          {errors.confirmPassword && (
+            <p className={styles.errorMsg}>{errors.confirmPassword}</p>
           )}
         </div>
       </div>

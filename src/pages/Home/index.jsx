@@ -1,7 +1,13 @@
+import Header from "../Header";
+import Employeelist from "../EmployeeList";
+import EmployeeAddEdit from "../EmployeeAddEdit";
+import styles from "./index.module.css";
+
 const Home = () => {
   return (
-    <div>
-      <h1>Welcome to Home!</h1>
+    <div className={styles.homeContainer}>
+      <Header/>
+      <Employeelist/>
     </div>
   );
 };

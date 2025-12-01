@@ -1,0 +1,23 @@
+.headerTop {
+  padding: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.headerTop h3 {
+  font-size: 2em;
+  font-weight: 500;
+}
+
+.headerBtns {
+  display: flex;
+  gap: 20px;
+}
+
+header h1 {
+  background-color: rgb(41, 74, 127);
+  color: white;
+  text-align: center;
+  padding: 40px;
+}

@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { loginApi , registerApi } from "../api/userApi";
+import { loginApi, registerApi } from "../redux/api/userApi";
 
 const userSlice = createSlice({
   name: "user",
@@ -14,9 +14,9 @@ const userSlice = createSlice({
       state.error = "";
     },
     loginSuccess: (state, action) => {
-      state.token = action.payload;
-      localStorage.setItem("token", action.payload);
-      console.log(action.payload);
+      const rawToken = action.payload.replace("Bearer ", ""); 
+      state.token = rawToken;
+      localStorage.setItem("token", rawToken);
       state.loading = false;
       state.error = "";
     },
@@ -30,11 +30,26 @@ const userSlice = createSlice({
       state.error = action.payload;
       state.loading = false;
     },
+    clearError: (state) => {
+      state.error = "";
+    },
+    logout: (state) => {
+      state.token = "";
+      state.loading = false;
+      state.error = "";
+      localStorage.removeItem("token");
+    },
   },
 });
 
-export const { startLoading, loginSuccess, registerSuccess, setError, logout } =
-  userSlice.actions;
+export const {
+  startLoading,
+  loginSuccess,
+  registerSuccess,
+  setError,
+  clearError,
+  logout,
+} = userSlice.actions;
 
 export const loginUser = (form) => async (dispatch) => {
   try {

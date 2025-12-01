@@ -1,0 +1,53 @@
+.detailContainer {
+  min-height: 100vh;
+  background-color: rgb(41, 74, 127);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.detailContainer>p {
+  margin-top: 20px;
+  color:white;
+}
+
+.detailContent {
+  padding:40px;
+  border-radius: 16px;
+  width: 50vw;
+  height: 70vh;
+  background-color: white;
+}
+.detailContent h1{
+  margin-bottom: 40px;
+}
+
+.inputForm {
+  display: grid;
+  grid-template-columns: repeat(2,1fr);
+  gap:20px;
+}
+
+.fieldGroup{
+  display: flex;
+  flex-direction: column;
+  gap:10px;
+}
+.dateRow,
+.phoneRow,
+.btnRow{
+  display: flex;
+  gap:20px;
+}
+
+.dateRow .fieldGroup,
+.phoneRow .fieldGroup{
+  flex:1;
+}
+
+.errorMsg {
+  color: red;
+  font-size: 0.875rem;
+  margin-top: 4px;
+}
