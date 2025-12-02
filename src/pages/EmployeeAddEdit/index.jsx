@@ -1,12 +1,18 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { registerEmployee,clearError } from "../../redux/employeeSlice";
-import { useDispatch,useSelector } from "react-redux";
+import {
+  registerEmployee,
+  updateEmployee,
+  clearError,
+} from "../../redux/employeeSlice";
+import { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import Input from "../../components/Input";
 import Button from "../../components/Button";
 import styles from "./index.module.css";
 
 const EmployeeAddEdit = () => {
+  const { id } = useParams();
+  const isEditMode = !!id;
   const [formData, setFormData] = useState({
     fname: "",
     lname: "",
@@ -18,9 +24,13 @@ const EmployeeAddEdit = () => {
     phoneNumber: "",
   });
 
-  const { error } = useSelector((state) => state.employee);
-  const dispatch=useDispatch();
-  const navigate=useNavigate();
+  const [originalData, setOriginalData] = useState(formData);
+  const [isModified, setIsModified] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const { error, selectedEmployee } = useSelector((state) => state.employee);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const today = new Date();
   const year18 = new Date(
@@ -35,17 +45,52 @@ const EmployeeAddEdit = () => {
 
   const [errors, setErrors] = useState({});
 
+  useEffect(() => {
+    if (isEditMode && selectedEmployee) {
+      const emp = selectedEmployee?.data?.employee;
+
+      const data = {
+        fname: emp?.fname || "",
+        lname: emp?.lname || "",
+        email: emp?.email || "",
+        dob: emp?.dob?.split("T")[0] || "",
+        doj: emp?.doj?.split("T")[0] || "",
+        designation: emp?.designation || "",
+        experience: emp?.experience || "",
+        phoneNumber: emp?.phoneNumber || "",
+      };
+
+      setFormData(data);
+      setOriginalData(data);
+      setIsModified(false);
+    }
+  }, [isEditMode, selectedEmployee]);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+
+    const updatedData = { ...formData, [name]: value };
+    setFormData(updatedData);
+
     setErrors((prev) => ({ ...prev, [name]: "" }));
+
+    const changed =
+      JSON.stringify(updatedData) !== JSON.stringify(originalData);
+
+    setIsModified(changed);
 
     if (error) dispatch(clearError());
   };
 
   const handleClearField = (fieldName) => {
-    setFormData((prev) => ({ ...prev, [fieldName]: "" }));
+    const updatedData = { ...formData, [fieldName]: "" };
+    setFormData(updatedData);
+
     setErrors((prev) => ({ ...prev, [fieldName]: "" }));
+
+    const changed =
+      JSON.stringify(updatedData) !== JSON.stringify(originalData);
+    setIsModified(changed);
   };
 
   const validateForm = () => {
@@ -90,6 +135,33 @@ const EmployeeAddEdit = () => {
       newErrors.phoneNumber = "Phone number must be 10 digits";
     }
 
+    if (formData.doj && formData.experience !== "") {
+      const dojDate = new Date(formData.doj);
+      const today = new Date();
+      const experience = parseInt(formData.experience);
+
+      let yearsDiff = today.getFullYear() - dojDate.getFullYear();
+
+      const hasNotHadAnniversary =
+        today.getMonth() < dojDate.getMonth() ||
+        (today.getMonth() === dojDate.getMonth() &&
+          today.getDate() < dojDate.getDate());
+
+      if (hasNotHadAnniversary) {
+        yearsDiff -= 1;
+      }
+
+      if (experience < 0) {
+        newErrors.experience = "Experience cannot be negative";
+      } else if (experience > yearsDiff) {
+        newErrors.experience =
+          "Experience cannot be more than years since date of joining";
+      } else if (experience < yearsDiff) {
+        newErrors.experience =
+          "Experience cannot be less than years since date of joining";
+      }
+    }
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -97,21 +169,34 @@ const EmployeeAddEdit = () => {
   const handleSubmit = async () => {
     if (!validateForm()) return;
 
-    const result = await dispatch(registerEmployee(formData));
+    setIsSubmitting(true);
 
-    if(result.success){
-      navigate("/" , {replace:true})
+    let result;
+
+    if (isEditMode) {
+      result = await dispatch(updateEmployee({ ...formData, employeeId: id }));
+    } else {
+      result = await dispatch(registerEmployee(formData));
     }
-      
+
+    if (result.success) {
+      navigate("/", { replace: true });
+    }
+
+    setIsSubmitting(false);
   };
+
+  const buttonLabel = isEditMode ? "Edit" : "Register";
+  const pageTitle = isEditMode ? "EDIT EMPLOYEE" : "REGISTER";
+  const disableSubmit = isEditMode ? !isModified : isSubmitting;
 
   return (
     <div className={styles.detailContainer}>
       <div className={styles.detailContent}>
-        <h1>REGISTER</h1>
+        <h1>{pageTitle}</h1>
 
         <form className={styles.inputForm}>
-          {/* FIRST NAME */}
+          {/* First Name */}
           <div className={styles.fieldGroup}>
             <label>First Name</label>
             <Input
@@ -131,7 +216,7 @@ const EmployeeAddEdit = () => {
             </p>
           </div>
 
-          {/* LAST NAME */}
+          {/* Last Name */}
           <div className={styles.fieldGroup}>
             <label>Last Name</label>
             <Input
@@ -151,7 +236,7 @@ const EmployeeAddEdit = () => {
             </p>
           </div>
 
-          {/* EMAIL */}
+          {/* Email */}
           <div className={styles.fieldGroup}>
             <label>Email address</label>
             <Input
@@ -171,18 +256,17 @@ const EmployeeAddEdit = () => {
             </p>
           </div>
 
-          {/* DATES */}
+          {/* Dates */}
           <div className={styles.dateRow}>
             <div className={styles.fieldGroup}>
               <label>Date of Birth</label>
               <Input
                 type="date"
                 name="dob"
+                max={year18}
                 value={formData.dob}
                 onChange={handleChange}
-                max={year18}
               />
-
               <p
                 className={`${styles.errorMsg} ${
                   errors.dob ? styles.visible : ""
@@ -197,11 +281,10 @@ const EmployeeAddEdit = () => {
               <Input
                 type="date"
                 name="doj"
+                max={todayDate}
                 value={formData.doj}
                 onChange={handleChange}
-                max={todayDate}
               />
-
               <p
                 className={`${styles.errorMsg} ${
                   errors.doj ? styles.visible : ""
@@ -212,7 +295,7 @@ const EmployeeAddEdit = () => {
             </div>
           </div>
 
-          {/* DESIGNATION */}
+          {/* Designation */}
           <div className={styles.fieldGroup}>
             <label>Designation</label>
             <Input
@@ -232,12 +315,12 @@ const EmployeeAddEdit = () => {
             </p>
           </div>
 
-          {/* EXPERIENCE + PHONE */}
+          {/* Experience + Phone */}
           <div className={styles.phoneRow}>
             <div className={styles.fieldGroup}>
-              <label>Experience(in Yrs)</label>
+              <label>Experience (in Yrs)</label>
               <Input
-                type="text"
+                type="number"
                 name="experience"
                 value={formData.experience}
                 onChange={handleChange}
@@ -273,26 +356,26 @@ const EmployeeAddEdit = () => {
             </div>
           </div>
 
+          {/* Buttons */}
           <div className={styles.btnRow}>
             <Button
               btnStyle="regBtn"
               type="button"
-              label="Register"
+              label={buttonLabel}
               onClick={handleSubmit}
+              disabled={disableSubmit}
             />
             <Button
               btnStyle="regBtn"
               type="button"
               label="Cancel"
-              onClick={() => navigate("/" , {replace:true})}
+              onClick={() => navigate("/", { replace: true })}
             />
           </div>
         </form>
-        
 
         {error && <p className={styles.errorMsg}>{error}</p>}
       </div>
-      <p>Click cancel to go back Home</p>
     </div>
   );
 };

@@ -2,7 +2,9 @@ import { createSlice } from "@reduxjs/toolkit";
 import {
   registerEmployeeApi,
   getEmployeeApi,
+  getEmployeeByIdApi,
   deleteEmployeeApi,
+  updateEmployeeApi,
 } from "./api/employeeApi";
 
 const employeSlice = createSlice({
@@ -20,12 +22,27 @@ const employeSlice = createSlice({
     },
     getEmployeeSuccess: (state, action) => {
       state.employees = action.payload.data.list;
-      console.log(state.employees);
+      state.loading = false;
+      state.error = "";
+    },
+    getEmployeeByIdSuccess: (state, action) => {
+      state.selectedEmployee = action.payload;
       state.loading = false;
       state.error = "";
     },
     registerEmployeeSuccess: (state, action) => {
       state.employees.push(action.payload);
+      state.loading = false;
+      state.error = "";
+    },
+    updateEmployeeSuccess: (state, action) => {
+      const index = state.employees.findIndex(
+        (emp) => emp.employeeId === action.payload.employeeId
+      );
+      if (index !== -1) {
+        state.employees[index] = action.payload;
+      }
+      state.selectedEmployee = action.payload;
       state.loading = false;
       state.error = "";
     },
@@ -50,6 +67,9 @@ export const {
   startLoading,
   registerEmployeeSuccess,
   getEmployeeSuccess,
+  getEmployeeByIdSuccess,
+  updateEmployeeSuccess,
+  deleteEmployeeSuccess,
   setError,
   clearError,
 } = employeSlice.actions;
@@ -71,6 +91,30 @@ export const getEmployee = () => async (dispatch) => {
     dispatch(startLoading());
     const data = await getEmployeeApi();
     dispatch(getEmployeeSuccess(data));
+    return { success: true };
+  } catch (err) {
+    dispatch(setError(err.message));
+    return { success: false };
+  }
+};
+
+export const getEmployeeById = (employeeId) => async (dispatch) => {
+  try {
+    dispatch(startLoading());
+    const data = await getEmployeeByIdApi(employeeId);
+    dispatch(getEmployeeByIdSuccess(data));
+    return { success: true };
+  } catch (err) {
+    dispatch(setError(err.message));
+    return { success: false };
+  }
+};
+
+export const updateEmployee = (form) => async (dispatch) => {
+  try {
+    dispatch(startLoading());
+    await updateEmployeeApi(form);
+    dispatch(updateEmployeeSuccess(form));
     return { success: true };
   } catch (err) {
     dispatch(setError(err.message));

@@ -5,7 +5,6 @@ import Button from "../../components/Button";
 import styles from "./index.module.css";
 
 const Header = () => {
-
   const dispatch = useDispatch();
   const navigate = useNavigate();
 

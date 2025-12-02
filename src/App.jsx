@@ -4,7 +4,7 @@ import Auth from "./pages/Auth";
 import Login from "./pages/Auth/Login";
 import Register from "./pages/Auth/Register";
 import Home from "./pages/Home";
-import EmployeeAddEdit from "./pages/EmployeeAddEdit"; 
+import EmployeeAddEdit from "./pages/EmployeeAddEdit";
 import store from "./redux/store";
 import "./App.css";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -23,13 +23,22 @@ function App() {
             }
           />
 
-          <Route 
-            path="/employee/signup" 
+          <Route
+            path="/employee/signup"
             element={
               <ProtectedRoute>
                 <EmployeeAddEdit />
               </ProtectedRoute>
-            } 
+            }
+          />
+
+          <Route
+            path="/employee/edit/:id"
+            element={
+              <ProtectedRoute>
+                <EmployeeAddEdit />
+              </ProtectedRoute>
+            }
           />
 
           <Route path="/users" element={<Auth />}>

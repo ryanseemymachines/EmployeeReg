@@ -1,15 +1,25 @@
-import { getEmployee, deleteEmployee } from "../../redux/employeeSlice";
+import {
+  getEmployee,
+  getEmployeeById,
+  deleteEmployee,
+} from "../../redux/employeeSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Modal from "../../components/Modal";
-import styles from "./index.module.css";
 import Button from "../../components/Button";
+import Input from "../../components/Input";
+import styles from "./index.module.css";
 
 const Employeelist = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedEmployee, setSelectedEmployee] = useState(null);
+  const [deleteSelectedEmployee, setDeleteSelectedEmployee] = useState(null);
+
+  const [searchInput, setSearchInput] = useState("");
+  const [search, setSearch] = useState("");
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { employees } = useSelector((state) => state.employee);
 
   useEffect(() => {
@@ -22,18 +32,30 @@ const Employeelist = () => {
     return date.toLocaleDateString();
   };
 
+  const handleEdit = async (employeeId) => {
+    const result = await dispatch(getEmployeeById(employeeId));
+    if (result.success) navigate(`/employee/edit/${employeeId}`);
+  };
+
   const handleDelete = (emp) => {
-    setSelectedEmployee(emp);
+    setDeleteSelectedEmployee(emp);
     setIsModalOpen(true);
   };
 
   const confirmDelete = async () => {
-    await dispatch(deleteEmployee(selectedEmployee.employeeId));
+    await dispatch(deleteEmployee(deleteSelectedEmployee.employeeId));
     dispatch(getEmployee());
     setIsModalOpen(false);
   };
 
   const employeeList = employees || [];
+
+  const filteredEmployees = employeeList.filter(
+    (emp) =>
+      `${emp.fname} ${emp.lname}`.toLowerCase().includes(search) ||
+      emp.email.toLowerCase().includes(search) ||
+      emp.designation.toLowerCase().includes(search)
+  );
 
   return (
     <div className={styles.container}>
@@ -41,10 +63,10 @@ const Employeelist = () => {
         <h1>Confirm Deletion</h1>
 
         <h3>
-          Are you sure you want to delete employee 
+          Are you sure you want to delete employee
           <strong>
             {" "}
-            "{selectedEmployee?.fname} {selectedEmployee?.lname}"
+            "{deleteSelectedEmployee?.fname} {deleteSelectedEmployee?.lname}"
           </strong>
           ?
         </h3>
@@ -59,7 +81,30 @@ const Employeelist = () => {
         </div>
       </Modal>
 
-      {employeeList.length > 0 ? (
+      <div className={styles.searchBox}>
+        <Input
+        inputStyle="searchInput"
+          type="search"
+          value={searchInput}
+          onChange={(e) => {
+            const value = e.target.value;
+            setSearchInput(value);
+
+            if (value.trim() === "") {
+              setSearch("");
+            }
+          }}
+          placeholder="Search for employee name, email or designation"
+        />
+
+        <Button
+          label="Search"
+          btnStyle="regBtn"
+          onClick={() => setSearch(searchInput.toLowerCase())}
+        />
+      </div>
+
+      {filteredEmployees.length > 0 ? (
         <table className={styles.employeeTable}>
           <thead>
             <tr className={styles.headerRow}>
@@ -75,7 +120,7 @@ const Employeelist = () => {
           </thead>
 
           <tbody>
-            {employeeList.map((emp) => (
+            {filteredEmployees.map((emp) => (
               <tr key={emp.employeeId} className={styles.dataRow}>
                 <td className={styles.tableData}>
                   {emp.fname} {emp.lname}
@@ -89,7 +134,7 @@ const Employeelist = () => {
                 <td className={styles.actionBtnCell}>
                   <ul className={styles.actionBtns}>
                     <li
-                      onClick={() => alert("Edit " + emp.employeeId)}
+                      onClick={() => handleEdit(emp.employeeId)}
                       className={styles.editBtn}
                     >
                       Edit

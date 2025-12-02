@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { loginUser, clearError, clearSuccess } from "../../../redux/userSlice";
+import { useNavigate } from "react-router-dom";
 import Input from "../../../components/Input";
 import Button from "../../../components/Button";
-import { useDispatch, useSelector } from "react-redux";
-import { loginUser, clearError } from "../../../redux/userSlice";
-import { useNavigate } from "react-router-dom";
 import styles from "./index.module.css";
 
 const Login = () => {
@@ -12,13 +12,27 @@ const Login = () => {
     password: "",
   });
 
-  const [errors, setErrors] = useState({});
   const [loginSuccess, setLoginSuccess] = useState(false);
+
+  const [errors, setErrors] = useState({});
+  const { loading, error, successMessage } = useSelector((state) => state.user);
+
+  useEffect(() => {
+    if (error) {
+      alert(error);
+      dispatch(clearError());
+    }
+  }, [error]);
+
+  useEffect(() => {
+    if (successMessage) {
+      alert(successMessage);
+      dispatch(clearSuccess());
+    }
+  }, [successMessage]);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
-  const { loading, error } = useSelector((state) => state.user);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -102,8 +116,6 @@ const Login = () => {
           <p className={styles.errorMsg}>{errors.password}</p>
         )}
       </div>
-
-      {error && <p className={styles.errorMsg}>{error}</p>}
 
       <Button
         btnStyle="regBtn"

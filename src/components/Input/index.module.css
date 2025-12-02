@@ -46,3 +46,7 @@
 .textInput[type="number"] {
   -moz-appearance: textfield;
 }
+
+.searchInput {
+  width: 30vw;
+}

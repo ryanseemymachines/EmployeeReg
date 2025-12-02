@@ -7,6 +7,7 @@ const userSlice = createSlice({
     token: localStorage.getItem("token") || "",
     loading: false,
     error: "",
+    successMessage: "",
   },
   reducers: {
     startLoading: (state) => {
@@ -14,7 +15,7 @@ const userSlice = createSlice({
       state.error = "";
     },
     loginSuccess: (state, action) => {
-      const rawToken = action.payload.replace("Bearer ", ""); 
+      const rawToken = action.payload.replace("Bearer ", "");
       state.token = rawToken;
       localStorage.setItem("token", rawToken);
       state.loading = false;
@@ -33,6 +34,12 @@ const userSlice = createSlice({
     clearError: (state) => {
       state.error = "";
     },
+    setSuccess: (state, action) => {
+      state.successMessage = action.payload;
+    },
+    clearSuccess: (state) => {
+      state.successMessage = "";
+    },
     logout: (state) => {
       state.token = "";
       state.loading = false;
@@ -48,6 +55,8 @@ export const {
   registerSuccess,
   setError,
   clearError,
+  setSuccess,
+  clearSuccess,
   logout,
 } = userSlice.actions;
 
@@ -56,6 +65,7 @@ export const loginUser = (form) => async (dispatch) => {
     dispatch(startLoading());
     const data = await loginApi(form);
     dispatch(loginSuccess(data.data.token));
+    dispatch(setSuccess("Login Successfull"));
     return { success: true };
   } catch (err) {
     dispatch(setError(err.message));
@@ -68,6 +78,7 @@ export const registerUser = (form) => async (dispatch) => {
     dispatch(startLoading());
     const data = await registerApi(form);
     dispatch(registerSuccess(data.data.token));
+    dispatch(setSuccess("Registration Successfull"));
     return { success: true };
   } catch (err) {
     dispatch(setError(err.message));

@@ -1,21 +1,24 @@
 import styles from "./index.module.css";
 
 const Input = (props) => {
-  const { 
-    type, 
-    name, 
-    placeholder, 
-    value, 
-    onChange, 
-    min, 
-    max, 
+  const {
+    type,
+    name,
+    placeholder,
+    value,
+    onChange,
+    min,
+    max,
     onClear,
+    inputStyle,
   } = props;
 
   return (
     <div className={styles.inputWrapper}>
       <input
-        className={styles.textInput} 
+        className={`${styles.textInput} ${
+          inputStyle ? styles[inputStyle] : ""
+        }`}
         type={type}
         name={name}
         placeholder={placeholder}

@@ -19,9 +19,33 @@ export const getEmployeeApi = async () => {
   }).then(handleResponse);
 };
 
+export const getEmployeeByIdApi = async (employeeId) => {
+  return fetch(
+    `${BASE_URL}/employee/getEmployeeById?employeeId=${employeeId}`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    }
+  ).then(handleResponse);
+};
+
 export const registerEmployeeApi = async (employeeData) => {
   return fetch(`${BASE_URL}/employee/register`, {
     method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+    },
+    body: JSON.stringify(employeeData),
+  }).then(handleResponse);
+};
+
+export const updateEmployeeApi = async (employeeData) => {
+  return fetch(`${BASE_URL}/employee/edit`, {
+    method: "PUT",
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -37,6 +61,6 @@ export const deleteEmployeeApi = async (employeeId) => {
       "Content-Type": "application/json",
       Authorization: `Bearer ${localStorage.getItem("token")}`,
     },
-    body: JSON.stringify({employeeId}),
+    body: JSON.stringify({ employeeId }),
   }).then(handleResponse);
 };
