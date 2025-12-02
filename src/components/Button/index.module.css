@@ -27,7 +27,8 @@
   background-color: rgb(41, 74, 127);
 }
 
-.regBtn {
+.regBtn,
+.headerBtn {
   font-weight: 500;
   color: white;
   background-color: rgb(41, 74, 127);
@@ -35,14 +36,9 @@
   transition: all 0.2s ease;
 }
 
-.regBtn:hover {
+.regBtn:hover,
+.headerBtn:hover {
   border: 2px solid rgb(84, 84, 84);
   color: rgb(102, 104, 106);
   background-color: white;
-}
-
-.headerBtn {
-  background-color: rgb(41, 74, 127);
-  color: white;
-  font-weight: 500;
 }
