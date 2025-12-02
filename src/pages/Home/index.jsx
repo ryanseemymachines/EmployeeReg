@@ -1,6 +1,5 @@
 import Header from "../Header";
 import Employeelist from "../EmployeeList";
-import EmployeeAddEdit from "../EmployeeAddEdit";
 import styles from "./index.module.css";
 
 const Home = () => {

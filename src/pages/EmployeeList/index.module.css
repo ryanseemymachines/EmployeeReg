@@ -1,6 +1,65 @@
-.actionBtns{
-    list-style-type: none;
-    display: flex;
-    gap:15px;
-    cursor: pointer;
+.container {
+  min-height: 70vh;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  margin-top: 200px;
+}
+
+.modalActions{
+  display: flex;
+  gap:30px;
+}
+.employeeTable {
+  width: 90%;
+  border: 1px solid rgb(164, 164, 164);
+  box-shadow: 0 0 5px grey;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.headerRow {
+  background-color: rgb(41, 74, 127);
+}
+
+.headerData {
+  color: white;
+  padding: 20px 0 20px 10px;
+  font-size: 1.1em;
+  font-weight: 400;
+}
+
+.headerActionData {
+  color: white;
+  padding: 20px 0 20px 10px;
+  font-size: 1.1em;
+  text-align: center;
+  font-weight: 700;
+}
+
+.tableData {
+  padding-left: 10px;
+  font-size: 1.1em;
+}
+
+.actionBtns {
+  list-style-type: none;
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  cursor: pointer;
+}
+
+.actionBtnCell {
+  padding-left: 10px;
+  font-size: 1.1em;
+  color: rgb(41, 74, 127);
+  font-weight: 600;
+}
+
+.editBtn:hover,
+.deleteBtn:hover {
+  transform: scale(1.1);
+  text-decoration: underline;
+  text-underline-offset: 5px;
 }

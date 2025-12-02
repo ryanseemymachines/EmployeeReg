@@ -57,7 +57,7 @@ export const {
 export const registerEmployee = (form) => async (dispatch) => {
   try {
     dispatch(startLoading());
-    const data = await registerEmployeeApi(form);
+    await registerEmployeeApi(form);
     dispatch(registerEmployeeSuccess(form));
     return { success: true };
   } catch (err) {
