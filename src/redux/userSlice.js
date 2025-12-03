@@ -37,13 +37,11 @@ const userSlice = createSlice({
     setSuccess: (state, action) => {
       state.successMessage = action.payload;
     },
-    clearSuccess: (state) => {
-      state.successMessage = "";
-    },
     logout: (state) => {
       state.token = "";
       state.loading = false;
       state.error = "";
+      state.successMessage = "";
       localStorage.removeItem("token");
     },
   },
@@ -56,7 +54,6 @@ export const {
   setError,
   clearError,
   setSuccess,
-  clearSuccess,
   logout,
 } = userSlice.actions;
 

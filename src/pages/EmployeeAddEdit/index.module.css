@@ -1,53 +1,147 @@
 .detailContainer {
   min-height: 100vh;
-  background-color: rgb(41, 74, 127);
+  background-color: #294a7f;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 }
 
-.detailContainer>p {
+.detailContainer > p {
   margin-top: 20px;
-  color:white;
+  color: #ffffff;
+  font-size: 1em;
 }
 
 .detailContent {
-  padding:40px;
+  padding: 40px;
   border-radius: 16px;
-  width: 50vw;
-  height: 70vh;
-  background-color: white;
+  width: 100%;
+  max-width: 60vw;
+  height: auto;
+  max-height: 90vh;
+  background-color: #ffffff;
+  overflow-y: auto;
 }
-.detailContent h1{
-  margin-bottom: 40px;
+
+.detailContent h1 {
+  margin: 0 0 30px 0;
+  font-size: 1.8em;
+  color: #294a7f;
 }
 
 .inputForm {
   display: grid;
-  grid-template-columns: repeat(2,1fr);
-  gap:20px;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
 }
 
-.fieldGroup{
+.fieldGroup {
   display: flex;
   flex-direction: column;
-  gap:10px;
+  gap: 8px;
 }
+
+.fieldGroup label {
+  font-size: 1.1em;
+  font-weight: 500;
+  color: #626366;
+}
+
 .dateRow,
 .phoneRow,
-.btnRow{
+.btnRow {
   display: flex;
-  gap:20px;
+  gap: 20px;
 }
 
 .dateRow .fieldGroup,
-.phoneRow .fieldGroup{
-  flex:1;
+.phoneRow .fieldGroup {
+  flex: 1;
 }
 
 .errorMsg {
-  color: red;
+  color: #ff0000;
   font-size: 0.875rem;
   margin-top: 4px;
+}
+
+@media (max-width: 1200px) {
+  .detailContent {
+    max-width: 70vw;
+    padding: 32px;
+  }
+
+  .detailContent h1 {
+    font-size: 1.5em;
+  }
+
+  .inputForm {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .dateRow,
+  .phoneRow {
+    flex-direction: column;
+    gap: 10px;
+  }
+}
+
+
+@media (max-width: 768px) {
+
+  .detailContent h1 {
+    font-size: 1.5em;
+  }
+
+  .fieldGroup label {
+    font-size: 0.95em;
+  }
+
+  .errorMsg {
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .detailContainer {
+    padding: 20px 10px;
+  }
+
+  .detailContent {
+    padding: 20px;
+    border-radius: 8px;
+  }
+
+  .detailContent h1 {
+    margin-bottom: 20px;
+    font-size: 1.2em;
+  }
+
+  .inputForm {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .fieldGroup {
+    gap: 6px;
+  }
+
+  .fieldGroup label {
+    font-size: 0.9em;
+  }
+
+  .btnRow {
+    flex-direction: column;
+    margin-top: 8px;
+  }
+
+  .btnRow button {
+    width: 100%;
+  }
+
+  .errorMsg {
+    font-size: 0.75rem;
+  }
 }

@@ -1,0 +1,18 @@
+.Toastify__toast--success {
+  background: #22bb27 !important;
+  color:#ffffff !important;
+  font-size: 18px !important;
+}
+
+.Toastify__toast--error {
+  background: hsl(0, 100%, 42%) !important;
+  color: #ffffff !important;
+}
+
+.Toastify__progress-bar--success  {
+    background:#0c3e06 !important;
+}
+
+.Toastify__progress-bar--error {
+    background: #570c0c !important;
+}

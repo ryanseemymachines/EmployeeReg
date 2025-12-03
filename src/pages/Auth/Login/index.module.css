@@ -1,32 +1,63 @@
 label {
   font-size: 1.2em;
   font-weight: 500;
-  color: rgb(98, 99, 102);
+  color: #626366;
+  display: block;
+  margin-bottom: 8px;
 }
 
 .fieldGroup {
   display: flex;
   flex-direction: column;
-  margin-bottom: 15px;
-}
-
-.passwordRow {
-  display: flex;
-  gap: 20px;
-}
-
-.passwordRow .fieldGroup {
-  flex: 1;
+  margin-bottom: 20px;
+  gap: 8px;
 }
 
 .errorMsg {
-  color: red;
+  color: #ff0000;
   font-size: 0.875rem;
-  margin-top: 4px;
+  margin: 0;
+  min-height: 1.2em;
+  display: block;
+}
+
+.errorMsg.visible {
+  display: block;
 }
 
 .successMessage {
-  color: green;
+  color: #008000;
   font-size: 0.875rem;
-  margin-top: 4px;
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  label {
+    font-size: 1.05em;
+  }
+
+  .fieldGroup {
+    margin-bottom: 15px;
+    gap: 6px;
+  }
+
+  .errorMsg {
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  label {
+    font-size: 0.95em;
+  }
+
+  .fieldGroup {
+    margin-bottom: 12px;
+    gap: 4px;
+  }
+
+  .errorMsg {
+    font-size: 0.75rem;
+    min-height: 1.1em;
+  }
 }

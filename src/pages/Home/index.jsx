@@ -18,8 +18,6 @@ const Home = () => {
 
     try {
       const decoded = jwtDecode(token);
-      console.log("Expires at:", new Date(decoded.exp * 1000));
-
       const isExpired = decoded.exp < Math.floor(Date.now() / 1000);
 
       if (isExpired) {

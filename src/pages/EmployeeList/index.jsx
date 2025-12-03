@@ -2,13 +2,16 @@ import {
   getEmployee,
   getEmployeeById,
   deleteEmployee,
+  clearError
 } from "../../redux/employeeSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import Modal from "../../components/Modal";
 import Button from "../../components/Button";
 import Input from "../../components/Input";
+import Spinner from "../../components/Spinner";
 import styles from "./index.module.css";
 
 const Employeelist = () => {
@@ -20,11 +23,27 @@ const Employeelist = () => {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { employees } = useSelector((state) => state.employee);
+  const { employees, loading, successMessage, error } = useSelector(
+    (state) => state.employee
+  );
 
   useEffect(() => {
     dispatch(getEmployee());
   }, [dispatch]);
+
+  useEffect(() => {
+    if (successMessage) {
+      toast.success(successMessage);
+      dispatch(getEmployee());
+    }
+  }, [successMessage]);
+
+  useEffect(() => {
+    if (error) {
+      toast.error(error);
+      dispatch(clearError());
+    }
+  }, [error]);
 
   const formatDate = (dateStr) => {
     if (!dateStr) return "";
@@ -59,6 +78,7 @@ const Employeelist = () => {
 
   return (
     <div className={styles.container}>
+      <Spinner isVisible={loading} />
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
         <h1>Confirm Deletion</h1>
 
@@ -83,7 +103,7 @@ const Employeelist = () => {
 
       <div className={styles.searchBox}>
         <Input
-        inputStyle="searchInput"
+          inputStyle="searchInput"
           type="search"
           value={searchInput}
           onChange={(e) => {
@@ -122,15 +142,27 @@ const Employeelist = () => {
           <tbody>
             {filteredEmployees.map((emp) => (
               <tr key={emp.employeeId} className={styles.dataRow}>
-                <td className={styles.tableData}>
+                <td data-label="Name" className={styles.tableData}>
                   {emp.fname} {emp.lname}
                 </td>
-                <td className={styles.tableData}>{emp.designation}</td>
-                <td className={styles.tableData}>{formatDate(emp.doj)}</td>
-                <td className={styles.tableData}>{emp.experience}</td>
-                <td className={styles.tableData}>{emp.email}</td>
-                <td className={styles.tableData}>{formatDate(emp.dob)}</td>
-                <td className={styles.tableData}>{emp.phoneNumber}</td>
+                <td data-label="Designation" className={styles.tableData}>
+                  {emp.designation}
+                </td>
+                <td data-label="DOJ" className={styles.tableData}>
+                  {formatDate(emp.doj)}
+                </td>
+                <td data-label="Experience" className={styles.tableData}>
+                  {emp.experience}
+                </td>
+                <td data-label="Email" className={styles.tableData}>
+                  {emp.email}
+                </td>
+                <td data-label="DOB" className={styles.tableData}>
+                  {formatDate(emp.dob)}
+                </td>
+                <td data-label="Phone Number" className={styles.tableData}>
+                  {emp.phoneNumber}
+                </td>
                 <td className={styles.actionBtnCell}>
                   <ul className={styles.actionBtns}>
                     <li

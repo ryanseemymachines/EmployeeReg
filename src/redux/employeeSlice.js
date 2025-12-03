@@ -14,6 +14,7 @@ const employeSlice = createSlice({
     selectedEmployee: null,
     loading: false,
     error: "",
+    successMessage: "",
   },
   reducers: {
     startLoading: (state) => {
@@ -34,6 +35,7 @@ const employeSlice = createSlice({
       state.employees.push(action.payload);
       state.loading = false;
       state.error = "";
+      state.successMessage = "Employee registered successfully!";
     },
     updateEmployeeSuccess: (state, action) => {
       const index = state.employees.findIndex(
@@ -45,6 +47,7 @@ const employeSlice = createSlice({
       state.selectedEmployee = action.payload;
       state.loading = false;
       state.error = "";
+      state.successMessage = "Employee updated successfully!";
     },
     deleteEmployeeSuccess: (state, action) => {
       state.employees = state.employees.filter(
@@ -52,6 +55,7 @@ const employeSlice = createSlice({
       );
       state.loading = false;
       state.error = "";
+      state.successMessage = "Employee deleted successfully!";
     },
     setError: (state, action) => {
       state.error = action.payload;
@@ -125,8 +129,8 @@ export const updateEmployee = (form) => async (dispatch) => {
 export const deleteEmployee = (id) => async (dispatch) => {
   try {
     dispatch(startLoading());
-    const data = await deleteEmployeeApi(id);
-    dispatch(deleteEmployeeSuccess(data));
+    await deleteEmployeeApi(id);
+    dispatch(deleteEmployeeSuccess(id));
     return { success: true };
   } catch (err) {
     dispatch(setError(err.message));

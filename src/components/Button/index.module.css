@@ -18,27 +18,86 @@
 
 .loginSwitchBtn {
   font-weight: 500;
-  color: rgb(102, 104, 106);
+  color: #66686a;
   transition: all 0.2s ease;
 }
 
 .loginSwitchBtn:hover {
-  color: white;
-  background-color: rgb(41, 74, 127);
+  color: #ffffff;
+  background-color: #294a7f;
 }
 
 .regBtn,
 .headerBtn {
   font-weight: 500;
-  color: white;
-  background-color: rgb(41, 74, 127);
-  border: 2px solid rgb(41, 74, 127);
+  color: #ffffff;
+  background-color: #294a7f;
+  border: 2px solid #294a7f;
   transition: all 0.2s ease;
 }
 
 .regBtn:hover,
 .headerBtn:hover {
-  border: 2px solid rgb(84, 84, 84);
-  color: rgb(102, 104, 106);
-  background-color: white;
+  border: 2px solid #545454;
+  color: #66686a;
+  background-color: #ffffff;
+}
+
+.editBtn {
+  font-weight: 500;
+  color: #ffffff;
+  background-color: #294a7f;
+  border: 2px solid #294a7f;
+  transition: all 0.2s ease;
+}
+
+.editBtn:hover {
+  border: 2px solid #545454;
+  color: #66686a;
+  background-color: #ffffff;
+}
+
+.editBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.editBtn:disabled:hover {
+  cursor: not-allowed;
+  background-color: #294a7f;
+  color: #ffffff;
+  border: 2px solid #294a7f;
+}
+
+@media (max-width: 768px) {
+  .Btn {
+    padding: 11px 28px;
+    font-size: 0.9em;
+    min-width: 90px;
+  }
+  .loginSwitchBtn {
+    width: 50%;
+  }
+  .regBtn,
+  .headerBtn {
+    width: 50%;
+  }
+}
+
+@media (max-width: 480px) {
+  .Btn {
+    padding: 10px 24px;
+    font-size: 0.85em;
+    min-width: 80px;
+    width: 100%;
+  }
+
+  .loginSwitchBtn {
+    width: 100%;
+  }
+
+  .regBtn,
+  .headerBtn {
+    width: 100%;
+  }
 }

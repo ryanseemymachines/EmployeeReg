@@ -1,11 +1,12 @@
 import {
   registerUser,
   clearError,
-  clearSuccess,
 } from "../../../redux/userSlice";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import Spinner from "../../../components/Spinner";
 import Input from "../../../components/Input";
 import Button from "../../../components/Button";
 import styles from "./index.module.css";
@@ -22,15 +23,14 @@ const Register = () => {
 
   useEffect(() => {
     if (error) {
-      alert(error);
+      toast.error(error);
       dispatch(clearError());
     }
   }, [error]);
 
   useEffect(() => {
     if (successMessage) {
-      alert(successMessage);
-      dispatch(clearSuccess());
+      toast.success(successMessage);
     }
   }, [successMessage]);
 
@@ -89,50 +89,66 @@ const Register = () => {
 
   return (
     <>
+    <Spinner isVisible={loading} />
       <h2>REGISTER</h2>
-
-      <div className={styles.fieldGroup}>
-        <label>Your email</label>
-        <Input
-          type="email"
-          name="email"
-          value={formData.email}
-          onChange={handleChange}
-          placeholder="Enter email"
-          onClear={() => handleClearField("email")}
-        />
-        {errors.email && <p className={styles.errorMsg}>{errors.email}</p>}
-      </div>
-
-      <div className={styles.passwordRow}>
+      <div className={styles.inputArea}>
         <div className={styles.fieldGroup}>
-          <label>Password</label>
+          <label>Your email</label>
           <Input
-            name="password"
-            type="password"
-            value={formData.password}
+            type="email"
+            name="email"
+            value={formData.email}
             onChange={handleChange}
-            placeholder="Password"
-            onClear={() => handleClearField("password")}
+            placeholder="Enter email"
+            onClear={() => handleClearField("email")}
           />
-          {errors.password && (
-            <p className={styles.errorMsg}>{errors.password}</p>
-          )}
+          <p
+            className={`${styles.errorMsg} ${
+              errors.email ? styles.visible : ""
+            }`}
+          >
+            {errors.email || "\u00A0"}
+          </p>
         </div>
 
-        <div className={styles.fieldGroup}>
-          <label>Confirm Password</label>
-          <Input
-            name="confirmPassword"
-            type="password"
-            value={formData.confirmPassword}
-            onChange={handleChange}
-            placeholder="Confirm Password"
-            onClear={() => handleClearField("confirmPassword")}
-          />
-          {errors.confirmPassword && (
-            <p className={styles.errorMsg}>{errors.confirmPassword}</p>
-          )}
+        <div className={styles.passwordRow}>
+          <div className={styles.fieldGroup}>
+            <label>Password</label>
+            <Input
+              name="password"
+              type="password"
+              value={formData.password}
+              onChange={handleChange}
+              placeholder="Password"
+              onClear={() => handleClearField("password")}
+            />
+            <p
+              className={`${styles.errorMsg} ${
+                errors.password ? styles.visible : ""
+              }`}
+            >
+              {errors.password || "\u00A0"}
+            </p>
+          </div>
+
+          <div className={styles.fieldGroup}>
+            <label>Confirm Password</label>
+            <Input
+              name="confirmPassword"
+              type="password"
+              value={formData.confirmPassword}
+              onChange={handleChange}
+              placeholder="Confirm Password"
+              onClear={() => handleClearField("confirmPassword")}
+            />
+            <p
+              className={`${styles.errorMsg} ${
+                errors.confirmPassword ? styles.visible : ""
+              }`}
+            >
+              {errors.confirmPassword || "\u00A0"}
+            </p>
+          </div>
         </div>
       </div>
 

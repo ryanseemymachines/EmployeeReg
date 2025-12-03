@@ -1,23 +1,72 @@
 .headerTop {
-  padding: 15px;
+  padding: 15px 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
+  gap: 15px;
+  background-color: #ffffff;
+  box-shadow: 0 2px 8px #0000000d;
 }
 
 .headerTop h3 {
-  font-size: 2em;
+  font-size: 1.8em;
   font-weight: 500;
+  margin: 0;
 }
 
 .headerBtns {
   display: flex;
-  gap: 20px;
+  gap: 15px;
 }
 
 header h1 {
-  background-color: rgb(41, 74, 127);
-  color: white;
+  background-color: #294a7f;
+  color: #ffffff;
   text-align: center;
-  padding: 40px;
+  padding: 30px 20px;
+  margin: 0;
+  font-size: 2em;
+  font-weight: 600;
+}
+
+@media (max-width: 768px) {
+  .headerTop {
+    padding: 15px;
+    justify-content: center;
+    text-align: center;
+    gap: 20px;
+  }
+
+  .headerTop h3 {
+    font-size: 1.5em;
+  }
+
+  .headerBtns {
+    gap: 12px;
+    font-size: 1.2em;
+    justify-content: center;
+    width: 100%;
+  }
+
+  header h1 {
+    padding: 20px 15px;
+    font-size: 1.7em;
+  }
+}
+
+@media (max-width: 480px) {
+  .headerTop h3 {
+    font-size: 1.1em;
+  }
+
+  .headerBtns button {
+    width: 50%;
+    font-size: 0.7em;
+  }
+
+  header h1 {
+    padding: 15px 12px;
+    font-size: 1.2em;
+  }
 }
