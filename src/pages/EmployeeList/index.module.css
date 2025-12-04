@@ -6,6 +6,18 @@
   gap: 30px;
 }
 
+.modalTitle {
+  color: #294a7f;
+  margin: 0;
+  font-size: 1.8em;
+}
+
+.modalMsg {
+  font-weight: 500;
+  margin: 0;
+  font-size: 1.1em;
+}
+
 .modalActions {
   display: flex;
   gap: 30px;
@@ -147,13 +159,21 @@
     flex-direction: column;
     align-items: center;
     align-self: center;
-    gap:15px;
+    gap: 15px;
+  }
+
+  .modalTitle h1 {
+    font-size: 1.5em;
+  }
+
+  .modalMsg h3 {
+    font-size: 1em;
   }
 }
 
 @media (max-width: 550px) {
   .dataRow {
-    grid-template-columns: repeat(2,1fr)
+    grid-template-columns: repeat(2, 1fr);
   }
 
   .tableData {
@@ -164,5 +184,15 @@
   .actionBtnCell {
     grid-row: 5;
     grid-column: 1 / span 2;
+  }
+}
+
+@media (max-width: 480px) {
+  .modalTitle h1 {
+    font-size: 1.2em;
+  }
+
+  .modalMsg h3 {
+    font-size: 0.95em;
   }
 }

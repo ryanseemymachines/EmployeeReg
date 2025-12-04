@@ -27,18 +27,6 @@
   border-radius: 8px;
 }
 
-.modalContent h1 {
-  color: #294a7f;
-  margin: 0;
-  font-size: 1.8em;
-}
-
-.modalContent h3 {
-  font-weight: 500;
-  margin: 0;
-  font-size: 1.1em;
-}
-
 @media (max-width: 768px) {
   .modalBackdrop {
     padding: 15px;
@@ -48,14 +36,6 @@
     padding: 20px;
     max-width: 100%;
     gap: 20px;
-  }
-
-  .modalContent h1 {
-    font-size: 1.5em;
-  }
-
-  .modalContent h3 {
-    font-size: 1em;
   }
 }
 
@@ -68,14 +48,6 @@
     padding: 16px;
     max-width: 100%;
     gap: 16px;
-  }
-
-  .modalContent h1 {
-    font-size: 1.2em;
-  }
-
-  .modalContent h3 {
-    font-size: 0.95em;
   }
 }
 

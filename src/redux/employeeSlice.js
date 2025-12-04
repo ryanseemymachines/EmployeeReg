@@ -6,36 +6,30 @@ import {
   deleteEmployeeApi,
   updateEmployeeApi,
 } from "./api/employeeApi";
+import { toast } from "react-toastify";
 
-const employeSlice = createSlice({
+const employeeSlice = createSlice({
   name: "employee",
   initialState: {
     employees: [],
     selectedEmployee: null,
     loading: false,
-    error: "",
-    successMessage: "",
   },
   reducers: {
     startLoading: (state) => {
       state.loading = true;
-      state.error = "";
     },
     getEmployeeSuccess: (state, action) => {
       state.employees = action.payload.data.list;
       state.loading = false;
-      state.error = "";
     },
     getEmployeeByIdSuccess: (state, action) => {
       state.selectedEmployee = action.payload;
       state.loading = false;
-      state.error = "";
     },
     registerEmployeeSuccess: (state, action) => {
       state.employees.push(action.payload);
       state.loading = false;
-      state.error = "";
-      state.successMessage = "Employee registered successfully!";
     },
     updateEmployeeSuccess: (state, action) => {
       const index = state.employees.findIndex(
@@ -46,23 +40,12 @@ const employeSlice = createSlice({
       }
       state.selectedEmployee = action.payload;
       state.loading = false;
-      state.error = "";
-      state.successMessage = "Employee updated successfully!";
     },
     deleteEmployeeSuccess: (state, action) => {
       state.employees = state.employees.filter(
         (emp) => emp.employeeId !== action.payload
       );
       state.loading = false;
-      state.error = "";
-      state.successMessage = "Employee deleted successfully!";
-    },
-    setError: (state, action) => {
-      state.error = action.payload;
-      state.loading = false;
-    },
-    clearError: (state) => {
-      state.error = "";
     },
   },
 });
@@ -74,18 +57,17 @@ export const {
   getEmployeeByIdSuccess,
   updateEmployeeSuccess,
   deleteEmployeeSuccess,
-  setError,
-  clearError,
-} = employeSlice.actions;
+} = employeeSlice.actions;
 
 export const registerEmployee = (form) => async (dispatch) => {
   try {
     dispatch(startLoading());
     await registerEmployeeApi(form);
     dispatch(registerEmployeeSuccess(form));
+    toast.success("Employee Registered Successfully");
     return { success: true };
   } catch (err) {
-    dispatch(setError(err.message));
+    toast.error(err.message);
     return { success: false };
   }
 };
@@ -97,7 +79,7 @@ export const getEmployee = () => async (dispatch) => {
     dispatch(getEmployeeSuccess(data));
     return { success: true };
   } catch (err) {
-    dispatch(setError(err.message));
+    toast.error(err.message);
     return { success: false };
   }
 };
@@ -109,7 +91,7 @@ export const getEmployeeById = (employeeId) => async (dispatch) => {
     dispatch(getEmployeeByIdSuccess(data));
     return { success: true };
   } catch (err) {
-    dispatch(setError(err.message));
+    toast.error(err.message);
     return { success: false };
   }
 };
@@ -119,9 +101,10 @@ export const updateEmployee = (form) => async (dispatch) => {
     dispatch(startLoading());
     await updateEmployeeApi(form);
     dispatch(updateEmployeeSuccess(form));
+    toast.success("Employee Updated Successfully");
     return { success: true };
   } catch (err) {
-    dispatch(setError(err.message));
+    toast.error(err.message);
     return { success: false };
   }
 };
@@ -131,11 +114,12 @@ export const deleteEmployee = (id) => async (dispatch) => {
     dispatch(startLoading());
     await deleteEmployeeApi(id);
     dispatch(deleteEmployeeSuccess(id));
+    toast.success("Employee Deleted Successfully");
     return { success: true };
   } catch (err) {
-    dispatch(setError(err.message));
+    toast.error(err.message);
     return { success: false };
   }
 };
 
-export default employeSlice.reducer;
+export default employeeSlice.reducer;

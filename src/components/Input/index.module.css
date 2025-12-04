@@ -26,13 +26,13 @@
   color: #b4b4b4;
 }
 
-.clearBtn {
+.clearBtn,
+.passwordToggleBtn {
   position: absolute;
-  right: 12px;
+  right: 10px;
   background: none;
   border: none;
-  font-size: 1.2em;
-  color: #5f5f5f;
+  color: #8d8d8d;
   cursor: pointer;
   padding: 0;
   display: flex;
@@ -45,10 +45,18 @@
 
 .clearBtn:hover {
   color: #ff0000;
-  font-weight: 600;
 }
 
-.clearBtn:active {
+.passwordToggleBtn {
+  right: 40px;
+}
+
+.passwordToggleBtn:hover {
+  color: #000000;
+}
+
+.clearBtn:active,
+.passwordToggleBtn:active {
   transform: scale(0.95);
 }
 
@@ -60,6 +68,9 @@
 
 .searchInput {
   width: 400px;
+  height: 55px; 
+  padding: 0 10px; 
+  box-sizing: border-box;
 }
 
 @media (max-width: 768px) {

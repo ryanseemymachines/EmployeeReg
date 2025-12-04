@@ -29,9 +29,7 @@ const Auth = () => {
             type="button"
             label={isLogin ? "New Here? Register Now!" : "Have an account?"}
             onClick={() => {
-              navigate(isLogin ? "/users/signup" : "/users/login", {
-                replace: true,
-              });
+              navigate(isLogin ? "/signup" : "/login", { replace: true });
             }}
           />
         </div>

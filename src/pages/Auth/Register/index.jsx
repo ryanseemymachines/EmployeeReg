@@ -1,12 +1,7 @@
-import {
-  registerUser,
-  clearError,
-} from "../../../redux/userSlice";
-import { useState, useEffect } from "react";
+import { registerUser } from "../../../redux/userSlice";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
-import Spinner from "../../../components/Spinner";
 import Input from "../../../components/Input";
 import Button from "../../../components/Button";
 import styles from "./index.module.css";
@@ -19,20 +14,7 @@ const Register = () => {
   });
 
   const [errors, setErrors] = useState({});
-  const { loading, error, successMessage } = useSelector((state) => state.user);
-
-  useEffect(() => {
-    if (error) {
-      toast.error(error);
-      dispatch(clearError());
-    }
-  }, [error]);
-
-  useEffect(() => {
-    if (successMessage) {
-      toast.success(successMessage);
-    }
-  }, [successMessage]);
+  const { loading } = useSelector((state) => state.user);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -43,8 +25,6 @@ const Register = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
 
     setErrors((prev) => ({ ...prev, [name]: "" }));
-
-    if (error) dispatch(clearError());
   };
 
   const validate = () => {
@@ -83,13 +63,12 @@ const Register = () => {
     const result = await dispatch(registerUser(formData));
 
     if (result.success) {
-      navigate("/users/login", { replace: true });
+      navigate("/login");
     }
   };
 
   return (
     <>
-    <Spinner isVisible={loading} />
       <h2>REGISTER</h2>
       <div className={styles.inputArea}>
         <div className={styles.fieldGroup}>

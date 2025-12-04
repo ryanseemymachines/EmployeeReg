@@ -1,7 +1,6 @@
 import styles from "./index.module.css";
 
-const Modal = ({ isOpen, onClose, children }) => {
-  if (!isOpen) return null;
+const Modal = ({ onClose, children }) => {
 
   return (
     <div className={styles.modalBackdrop} onClick={onClose}>
@@ -13,3 +12,4 @@ const Modal = ({ isOpen, onClose, children }) => {
 };
 
 export default Modal;
+

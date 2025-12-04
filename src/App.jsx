@@ -4,7 +4,8 @@ import { lazy, Suspense } from "react";
 import { ToastContainer } from "react-toastify";
 import store from "./redux/store";
 import ProtectedRoute from "./components/ProtectedRoute";
-import Spinner from "./components/Spinner";
+import UserProtectedRoute from "./components/UserProtectedRoute";
+import SpinnerLazy from "./components/SpinnerLazy";
 import "react-toastify/dist/ReactToastify.css";
 import "./App.css";
 
@@ -14,55 +15,72 @@ const Register = lazy(() => import("./pages/Auth/Register"));
 const Home = lazy(() => import("./pages/Home"));
 const EmployeeAddEdit = lazy(() => import("./pages/EmployeeAddEdit"));
 
-const LazyFallback = () => {
-  return <Spinner isVisible={true} />;
-};
-
 function App() {
   return (
-    <>
-      <Provider store={store}>
-        <BrowserRouter>
-          <Suspense fallback={<LazyFallback />}>
-            <Routes>
-              <Route
-                path="/"
-                element={
-                  <ProtectedRoute>
-                    <Home />
-                  </ProtectedRoute>
-                }
-              />
+    <Provider store={store}>
+      <BrowserRouter>
+        <Routes>
+          <Route
+            element={
+              <Suspense fallback={<SpinnerLazy />}>
+                <Auth />
+              </Suspense>
+            }
+          >
+            <Route
+              path="/login"
+              element={
+                <UserProtectedRoute>
+                  <Login />
+                </UserProtectedRoute>
+              }
+            />
+            <Route
+              path="/signup"
+              element={
+                <UserProtectedRoute>
+                  <Register />
+                </UserProtectedRoute>
+              }
+            />
+          </Route>
 
-              <Route
-                path="/employee/signup"
-                element={
-                  <ProtectedRoute>
-                    <EmployeeAddEdit />
-                  </ProtectedRoute>
-                }
-              />
+          <Route
+            path="/"
+            element={
+              <ProtectedRoute>
+                <Suspense fallback={<SpinnerLazy />}>
+                  <Home />
+                </Suspense>
+              </ProtectedRoute>
+            }
+          />
 
-              <Route
-                path="/employee/edit/:id"
-                element={
-                  <ProtectedRoute>
-                    <EmployeeAddEdit />
-                  </ProtectedRoute>
-                }
-              />
+          <Route
+            path="/employee/signup"
+            element={
+              <Suspense fallback={<SpinnerLazy />}>
+                <ProtectedRoute>
+                  <EmployeeAddEdit />
+                </ProtectedRoute>
+              </Suspense>
+            }
+          />
+          <Route
+            path="/employee/edit/:id"
+            element={
+              <ProtectedRoute>
+                <Suspense fallback={<SpinnerLazy />}>
+                  <EmployeeAddEdit />
+                </Suspense>
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
+      </BrowserRouter>
 
-              <Route path="/users" element={<Auth />}>
-                <Route path="login" element={<Login />} />
-                <Route path="signup" element={<Register />} />
-              </Route>
-            </Routes>
-          </Suspense>
-        </BrowserRouter>
-      </Provider>
-      <ToastContainer position="top-center"
-        autoClose={1500}/>
-    </>
+      <ToastContainer position="top-center" autoClose={1500} />
+    </Provider>
   );
 }
 

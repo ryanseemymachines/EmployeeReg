@@ -1,20 +1,19 @@
-import {
-  registerEmployee,
-  updateEmployee,
-  clearError,
-} from "../../redux/employeeSlice";
+import { registerEmployee, updateEmployee } from "../../redux/employeeSlice";
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { toast } from "react-toastify";
+
 import Input from "../../components/Input";
 import Button from "../../components/Button";
 import Spinner from "../../components/Spinner";
+
 import styles from "./index.module.css";
 
 const EmployeeAddEdit = () => {
   const { id } = useParams();
   const isEditMode = !!id;
+
+  const { selectedEmployee, loading } = useSelector((state) => state.employee);
 
   const [formData, setFormData] = useState({
     fname: "",
@@ -31,26 +30,19 @@ const EmployeeAddEdit = () => {
   const [isModified, setIsModified] = useState(false);
   const [errors, setErrors] = useState({});
 
-  const { error, selectedEmployee, loading, successMessage } = useSelector(
-    (state) => state.employee
-  );
-
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (error) {
-      toast.error(error);
-      dispatch(clearError());
-    }
-  }, [error]);
+  const today = new Date();
+  const year18 = new Date(
+    today.getFullYear() - 18,
+    today.getMonth(),
+    today.getDate()
+  )
+    .toISOString()
+    .split("T")[0];
 
-  useEffect(() => {
-    if (successMessage) {
-      toast.success(successMessage);
-      navigate("/", { replace: true });
-    }
-  }, [successMessage]);
+  const todayDate = today.toISOString().split("T")[0];
 
   useEffect(() => {
     if (isEditMode && selectedEmployee) {
@@ -72,17 +64,6 @@ const EmployeeAddEdit = () => {
       setIsModified(false);
     }
   }, [isEditMode, selectedEmployee]);
-
-  const today = new Date();
-  const year18 = new Date(
-    today.getFullYear() - 18,
-    today.getMonth(),
-    today.getDate()
-  )
-    .toISOString()
-    .split("T")[0];
-
-  const todayDate = today.toISOString().split("T")[0];
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -131,24 +112,8 @@ const EmployeeAddEdit = () => {
       newErrors.experience = "Experience is required";
     else if (isNaN(formData.experience))
       newErrors.experience = "Experience must be a number";
-    else {
-      const dojDate = new Date(formData.doj);
-      let yearsDiff = today.getFullYear() - dojDate.getFullYear();
-
-      const notCompleted =
-        today.getMonth() < dojDate.getMonth() ||
-        (today.getMonth() === dojDate.getMonth() &&
-          today.getDate() < dojDate.getDate());
-
-      if (notCompleted) yearsDiff--;
-
-      const exp = parseInt(formData.experience);
-
-      if (exp < 0) newErrors.experience = "Experience cannot be negative";
-      else if (exp !== yearsDiff)
-        newErrors.experience =
-          "Experience must match years since date of joining";
-    }
+    else if (parseInt(formData.experience) < 0)
+      newErrors.experience = "Experience cannot be negative";
 
     if (!formData.phoneNumber.trim())
       newErrors.phoneNumber = "Phone number is required";
@@ -162,20 +127,26 @@ const EmployeeAddEdit = () => {
   const handleSubmit = async () => {
     if (!validateForm()) return;
 
+    let result;
+
     if (isEditMode) {
-      await dispatch(updateEmployee({ ...formData, employeeId: id }));
+      result = await dispatch(updateEmployee({ ...formData, employeeId: id }));
     } else {
-      await dispatch(registerEmployee(formData));
+      result = await dispatch(registerEmployee(formData));
+    }
+
+    if (result?.success) {
+      navigate("/", { replace: true });
     }
   };
 
   const buttonLabel = isEditMode ? "Edit" : "Register";
   const disableSubmit = isEditMode ? !isModified : loading;
 
-  return (
+  return loading ? (
+    <Spinner />
+  ) : (
     <div className={styles.detailContainer}>
-      <Spinner isVisible={loading} />
-
       <div className={styles.detailContent}>
         <h1>{isEditMode ? "EDIT EMPLOYEE" : "REGISTER"}</h1>
 
@@ -198,7 +169,7 @@ const EmployeeAddEdit = () => {
           <div className={styles.fieldGroup}>
             <label>Last Name</label>
             <Input
-            type="text"
+              type="text"
               name="lname"
               value={formData.lname}
               placeholder="Enter last name..."
@@ -253,7 +224,7 @@ const EmployeeAddEdit = () => {
           <div className={styles.fieldGroup}>
             <label>Designation</label>
             <Input
-            type="text"
+              type="text"
               name="designation"
               value={formData.designation}
               placeholder="Enter designation..."
@@ -274,6 +245,7 @@ const EmployeeAddEdit = () => {
                 placeholder="Enter experience..."
                 onChange={handleChange}
                 onClear={() => handleClearField("experience")}
+                onWheel={(e) => e.target.blur()}
               />
               <p className={styles.errorMsg}>{errors.experience || "\u00A0"}</p>
             </div>
@@ -282,7 +254,8 @@ const EmployeeAddEdit = () => {
               <label>Phone</label>
               <Input
                 name="phoneNumber"
-                type="number"
+                type="tel"
+                maxLength="10"
                 value={formData.phoneNumber}
                 placeholder="Enter phone..."
                 onChange={handleChange}

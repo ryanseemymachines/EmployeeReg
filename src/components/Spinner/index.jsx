@@ -1,8 +1,6 @@
 import styles from "./index.module.css";
 
-const Spinner = ({ isVisible = false }) => {
-  if (!isVisible) return null;
-
+const Spinner = () => {
   return (
     <div className={styles.spinnerOverlay}>
       <div className={styles.spinner}></div>
@@ -11,3 +9,4 @@ const Spinner = ({ isVisible = false }) => {
 };
 
 export default Spinner;
+

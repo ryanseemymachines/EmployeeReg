@@ -1,9 +1,7 @@
-import { useState, useEffect } from "react";
+import { loginUser } from "../../../redux/userSlice";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { loginUser, clearError } from "../../../redux/userSlice";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
-import Spinner from "../../../components/Spinner";
 import Input from "../../../components/Input";
 import Button from "../../../components/Button";
 import styles from "./index.module.css";
@@ -18,21 +16,7 @@ const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { loading, error, successMessage } = useSelector((state) => state.user);
-
-  useEffect(() => {
-    if (error) {
-      toast.error(error);
-      dispatch(clearError());
-    }
-  }, [error]);
-
-  useEffect(() => {
-    if (successMessage) {
-      toast.success(successMessage);
-      navigate("/", { replace: true });
-    }
-  }, [successMessage]);
+  const { loading } = useSelector((state) => state.user);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -65,12 +49,13 @@ const Login = () => {
 
   const handleSubmit = async () => {
     if (!validate()) return;
-    await dispatch(loginUser(formData));
+    const result = await dispatch(loginUser(formData));
+    if (result.success) navigate("/", { replace: true });
+    else navigate("/login");
   };
 
   return (
     <>
-      <Spinner isVisible={loading} />
       <h2>LOGIN</h2>
 
       <div className={styles.inputArea}>

@@ -1,47 +1,39 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { loginApi, registerApi } from "../redux/api/userApi";
+import { toast } from "react-toastify";
 
 const userSlice = createSlice({
   name: "user",
   initialState: {
     token: localStorage.getItem("token") || "",
     loading: false,
-    error: "",
-    successMessage: "",
   },
   reducers: {
     startLoading: (state) => {
       state.loading = true;
-      state.error = "";
     },
     loginSuccess: (state, action) => {
       const rawToken = action.payload.replace("Bearer ", "");
       state.token = rawToken;
       localStorage.setItem("token", rawToken);
       state.loading = false;
-      state.error = "";
     },
-    registerSuccess: (state, action) => {
-      state.token = action.payload;
-      localStorage.setItem("token", action.payload);
+    loginFailure: (state) => {
+      state.token = "";
       state.loading = false;
-      state.error = "";
+      localStorage.removeItem("token");
     },
-    setError: (state, action) => {
-      state.error = action.payload;
+    registerSuccess: (state) => {
       state.loading = false;
     },
-    clearError: (state) => {
-      state.error = "";
-    },
-    setSuccess: (state, action) => {
-      state.successMessage = action.payload;
+    registerFailure: (state) => {
+      state.token = "";
+      state.loading = false;
+      localStorage.removeItem("token");
     },
     logout: (state) => {
       state.token = "";
       state.loading = false;
-      state.error = "";
-      state.successMessage = "";
       localStorage.removeItem("token");
     },
   },
@@ -50,10 +42,9 @@ const userSlice = createSlice({
 export const {
   startLoading,
   loginSuccess,
+  loginFailure,
   registerSuccess,
-  setError,
-  clearError,
-  setSuccess,
+  registerFailure,
   logout,
 } = userSlice.actions;
 
@@ -62,10 +53,11 @@ export const loginUser = (form) => async (dispatch) => {
     dispatch(startLoading());
     const data = await loginApi(form);
     dispatch(loginSuccess(data.data.token));
-    dispatch(setSuccess("Login Successfull"));
+    toast.success("Login Successful");
     return { success: true };
   } catch (err) {
-    dispatch(setError(err.message));
+    dispatch(loginFailure());
+    toast.error(err.message);
     return { success: false };
   }
 };
@@ -73,12 +65,13 @@ export const loginUser = (form) => async (dispatch) => {
 export const registerUser = (form) => async (dispatch) => {
   try {
     dispatch(startLoading());
-    const data = await registerApi(form);
-    dispatch(registerSuccess(data.data.token));
-    dispatch(setSuccess("Registration Successfull"));
+    await registerApi(form);
+    dispatch(registerSuccess());
+    toast.success("Registration Successful");
     return { success: true };
   } catch (err) {
-    dispatch(setError(err.message));
+    dispatch(registerFailure());
+    toast.error(err.message);
     return { success: false };
   }
 };

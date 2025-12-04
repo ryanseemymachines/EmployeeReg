@@ -1,10 +1,12 @@
 import { useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
+import { lazy, Suspense } from "react";
+import SpinnerLazy from "../../components/SpinnerLazy";
 import Header from "../Header";
-import Employeelist from "../EmployeeList";
 import styles from "./index.module.css";
 
+const Employeelist = lazy(() => import("../EmployeeList"));
 const Home = () => {
   const navigate = useNavigate();
 
@@ -12,7 +14,7 @@ const Home = () => {
     const token = localStorage.getItem("token");
 
     if (!token) {
-      navigate("/users/login");
+      navigate("/login");
       return;
     }
 
@@ -22,18 +24,20 @@ const Home = () => {
 
       if (isExpired) {
         localStorage.removeItem("token");
-        navigate("/users/login"); 
+        navigate("/login");
       }
     } catch (error) {
       localStorage.removeItem("token");
-      navigate("/users/login"); 
+      navigate("/login");
     }
   }, [navigate]);
 
   return (
     <div className={styles.homeContainer}>
       <Header />
-      <Employeelist />
+      <Suspense fallback={<SpinnerLazy />}>
+        <Employeelist />
+      </Suspense>
     </div>
   );
 };
