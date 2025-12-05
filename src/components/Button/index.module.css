@@ -1,0 +1,103 @@
+.Btn {
+  width: fit-content;
+  border: none;
+  padding: 15px 45px;
+  font-size: 1em;
+  border-top-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+}
+
+.Btn:hover {
+  cursor: pointer;
+}
+
+.Btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.loginSwitchBtn {
+  font-weight: 500;
+  color: #66686a;
+  transition: all 0.2s ease;
+}
+
+.loginSwitchBtn:hover {
+  background-color: #b4b4b4;
+  color: #000000;
+}
+
+.regBtn,
+.headerBtn {
+  font-weight: 500;
+  color: #ffffff;
+  background-color: #294a7f;
+  border: 2px solid #294a7f;
+  transition: all 0.2s ease;
+}
+
+.regBtn:hover,
+.headerBtn:hover {
+  border: 2px solid #545454;
+  color: #66686a;
+  background-color: #ffffff;
+}
+
+.editBtn {
+  font-weight: 500;
+  color: #ffffff;
+  background-color: #294a7f;
+  border: 2px solid #294a7f;
+  transition: all 0.2s ease;
+}
+
+.editBtn:hover {
+  border: 2px solid #545454;
+  color: #66686a;
+  background-color: #ffffff;
+}
+
+.editBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.editBtn:disabled:hover {
+  cursor: not-allowed;
+  background-color: #294a7f;
+  color: #ffffff;
+  border: 2px solid #294a7f;
+}
+
+@media (max-width: 768px) {
+  .Btn {
+    padding: 11px 28px;
+    font-size: 0.9em;
+    min-width: 90px;
+  }
+  .loginSwitchBtn {
+    width: 50%;
+  }
+  .regBtn,
+  .headerBtn {
+    width: 50%;
+  }
+}
+
+@media (max-width: 480px) {
+  .Btn {
+    padding: 10px 24px;
+    font-size: 0.85em;
+    min-width: 80px;
+    width: 100%;
+  }
+
+  .loginSwitchBtn {
+    width: 100%;
+  }
+
+  .regBtn,
+  .headerBtn {
+    width: 100%;
+  }
+}

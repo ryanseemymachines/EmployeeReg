@@ -1,0 +1,25 @@
+.lazyWrapper {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.7); 
+  backdrop-filter: blur(3px);
+  z-index: 9999;
+}
+
+.lazySpinner {
+  width: 55px;
+  height: 55px;
+  border: 6px solid #e0e0e0;
+  border-top-color: #007bff;
+  border-radius: 50%;
+  animation: spin 0.9s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
